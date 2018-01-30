@@ -77,6 +77,7 @@ if [ ! -d $backup_folder ]; then
 		echo "Could not create Backup folder. Please make sure you have sufficent rights to create $backup_folder"
 		exit 1
 	fi
+	echo "-------------------------------"
 fi
 
 # Check if the config file exists
@@ -86,7 +87,7 @@ fi
 date=`date +%d\-%m\-%Y\_%H\-%M\-%S`
 
 # Delete backups older than three days if there are any
-if [ ! "$(ls -A $backup_folder)" ]; then
+if [ "$(ls -A $backup_folder)" ]; then
 	echo "Deleting Backups older than three days..."
 	find $backup_folder/* -type d -ctime +3 | xargs rm -rf
 	echo "Deleted."
