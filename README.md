@@ -9,7 +9,8 @@
 
 ### TODO
 
-* Add example on how to use it
+* Add example on how to use it -> example `backup_hosts.json`
 * Add options to configure it
 * Add environment variables to configure backup + hosts file location
 * Dockerimage
+  * Configurable (Environment variables) Cron interval
