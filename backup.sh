@@ -22,11 +22,13 @@ fi
 # Save the date
 date=`date +%d\-%m\-%Y\_%H\-%M\-%S`
 
-# Delete backups older than three days
-echo "Deleting Backups older than three days..."
-find $backup_folder/* -type d -ctime +3 | xargs rm -rf
-echo "Deleted."
-echo "-------------------------------"
+# Delete backups older than three days if there are any
+if [ ! "$(ls -A $backup_folder)" ]; then
+	echo "Deleting Backups older than three days..."
+	find $backup_folder/* -type d -ctime +3 | xargs rm -rf
+	echo "Deleted."
+	echo "-------------------------------"
+fi
 
 # Create new Backup folder
 mkdir $backup_folder/"$date" -p
