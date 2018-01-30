@@ -1,12 +1,72 @@
 #!/bin/bash
 
+# Copyright 2018 K. Langenberg. All rights reserved.
+# Use of this source code is governed by a GPLv3-style
+# license that can be found in the LICENSE file.
 
-# Config
-backup_hosts_location=$PWD/backup_hosts.json
-backup_hosts_file=$(<$backup_hosts_location)
+#########################
+# Environment variables #
+#########################
+
+# TODO
+
+
+########
+# Passed options, any passed option will overwrite a previously set environment variable
+########
+
+while getopts ":b:c:h" opt; do
+  case $opt in
+    b)
+      backup_folder=$OPTARG
+      ;;
+    c)
+      backup_hosts_location=$OPTARG
+      ;;
+    h)
+      echo "AVAILABLE OPTIONS: 
+
+-b: Folder where to store the backups.
+-c: Location of the config.json file which holds all hosts you want to backup.
+-h: Print this help message.
+
+ 
+Copyright 2018 K. Langenberg. All rights reserved.
+Use of this source code is governed by a GPLv3-style
+license that can be found in the LICENSE file."
+	  exit 0
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG. Use -h to print all available options." >&2
+      exit 1
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument. Use -h to print all available options." >&2
+      exit 1
+      ;;
+  esac
+done
+
+############
+# Defaults #
+############
+
+# Backup configuration file
+if [ -z $backup_hosts_location ]
+then 
+	backup_hosts_location=$PWD/backup_hosts.json
+fi
 
 # Backup folder
-backup_folder=$PWD/backups
+if [ -z $backup_folder ]
+then 
+	backup_folder=$PWD/backups
+fi
+
+# Load Config
+backup_hosts_file=$(<$backup_hosts_location)
+
+
 
 # Check if the backup folder exists
 if [ ! -d $backup_folder ]; then
@@ -18,6 +78,9 @@ if [ ! -d $backup_folder ]; then
 		exit 1
 	fi
 fi
+
+# Check if the config file exists
+# TODO
 
 # Save the date
 date=`date +%d\-%m\-%Y\_%H\-%M\-%S`
