@@ -42,10 +42,9 @@ while getopts ":b:c:d:h" opt; do
       max_backups=$OPTARG
       ;;
     h)
-      echo "AVAILABLE OPTIONS: 
-
--b: Folder where to store the backups.
--c: Location of the config.json file which holds all hosts you want to backup.
+      echo "Available Options:
+-b: Folder where to store the backups. Defaults to \$PWD/backups.
+-c: Location of the config.json file which holds all hosts you want to backup. Defaults to \$PWD/backup_hosts.json.
 -d: Maximum number of backups to keep. Defaults to 24.
 -h: Print this help message.
 
