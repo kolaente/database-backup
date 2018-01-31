@@ -63,10 +63,12 @@ then
 	backup_folder=$PWD/backups
 fi
 
-# Load Config
-backup_hosts_file=$(<$backup_hosts_location)
+# Save the date
+date=`date +%d\-%m\-%Y\_%H\-%M\-%S`
 
-
+###############
+# File Checks #
+###############
 
 # Check if the backup folder exists
 if [ ! -d $backup_folder ]; then
@@ -81,10 +83,17 @@ if [ ! -d $backup_folder ]; then
 fi
 
 # Check if the config file exists
-# TODO
+if [ ! -f $backup_hosts_location ]; then
+	echo "Config file $backup_hosts_location does not exist."
+	exit 1
+fi
 
-# Save the date
-date=`date +%d\-%m\-%Y\_%H\-%M\-%S`
+# Load Config
+backup_hosts_file=$(<$backup_hosts_location)>)
+
+####################
+# Start the backup #
+####################
 
 # Delete backups older than three days if there are any
 if [ "$(ls -A $backup_folder)" ]; then
