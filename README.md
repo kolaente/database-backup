@@ -4,8 +4,11 @@
 
 ## Usage
 
- // TODO
+// TODO
 
+## Usage with docker
+
+// TODO --> Cron + Max backups
 
 ### TODO
 
