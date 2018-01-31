@@ -147,6 +147,10 @@ fi
 # Create new Backup folder
 mkdir $backup_folder/"$date" -p
 
+# Print start time
+echo "Started Backup at `date`"
+echo "----------------------------------------------"
+
 # Loop through all backupfolders and convert them
 for row in $(echo "${backup_hosts_file}" | jq -r '.[] | @base64'); do  
 	_jq() {
@@ -195,3 +199,7 @@ for row in $(echo "${backup_hosts_file}" | jq -r '.[] | @base64'); do
     echo "-------------------------"
 
 done
+
+# Print end time
+echo "Finished Backup at `date`"
+echo "-----------------------------------------------"
