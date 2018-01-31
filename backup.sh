@@ -8,8 +8,17 @@
 # Environment variables #
 #########################
 
-# TODO
+# Backup folder
+if [ -n $DB_BACKUP_FOLDER ]
+then
+	backup_folder=$DB_BACKUP_FOLDER
+fi
 
+# Backup hosts file
+if [ -n $DB_BACKUP_HOSTS_FILE ]
+then
+	backup_hosts_location=$DB_BACKUP_HOSTS_FILE
+fi
 
 ########
 # Passed options, any passed option will overwrite a previously set environment variable
@@ -30,6 +39,9 @@ while getopts ":b:c:h" opt; do
 -c: Location of the config.json file which holds all hosts you want to backup.
 -h: Print this help message.
 
+Environment Variables:
+- DB_BACKUP_FOLDER: Where to store the backups.
+- DB_BACKUP_HOSTS_FILE: Location of the config.json file which holds all hosts you want to backup.
  
 Copyright 2018 K. Langenberg. All rights reserved.
 Use of this source code is governed by a GPLv3-style
@@ -89,7 +101,7 @@ if [ ! -f $backup_hosts_location ]; then
 fi
 
 # Load Config
-backup_hosts_file=$(<$backup_hosts_location)>)
+backup_hosts_file=$(<$backup_hosts_location)
 
 ####################
 # Start the backup #
