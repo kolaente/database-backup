@@ -81,14 +81,14 @@ fi
 
 # Backup folder
 if [ -z $backup_folder ]
-then 
+then
 	backup_folder=$PWD/backups
 fi
 
 # Max number of backups to keep
 if [ -z $max_backups ]
-then 
-	$max_backups=24
+then
+	max_backups=24
 fi
 
 # Save the date
@@ -123,13 +123,21 @@ backup_hosts_file=$(cat $backup_hosts_location)
 # Delete old backups #
 ######################
 
-if [ -n "\${max_backups}" && "$(ls -A $backup_folder)" ]; then
-    while [ \$(ls $backup_folder -1 | wc -l) -gt \${max_backups} ];
-    do
-        BACKUP_TO_BE_DELETED=\$(ls $backup_folder -1tr | head -n 1)
-        echo "   Backup \${BACKUP_TO_BE_DELETED} is deleted"
-        rm -rf \${BACKUP_TO_BE_DELETED}
+if [ -n "${max_backups}" ] && [ "$(ls -A $backup_folder)" ]; then
+	deleted=false
+
+	# While there are > $max_backups, delete every old backup
+    while [ $(ls $backup_folder -1 | wc -l) -gt $max_backups ]; do
+	    BACKUP_TO_BE_DELETED=$(ls $backup_folder -1tr | head -n 1)
+        echo "Deleted old backup $BACKUP_TO_BE_DELETED"
+        rm -rf $backup_folder/$BACKUP_TO_BE_DELETED
+
+		deleted=true
     done
+
+	if $deleted ; then
+		echo "--------------------------------------"
+	fi
 fi
 
 ####################
@@ -184,6 +192,6 @@ for row in $(echo "${backup_hosts_file}" | jq -r '.[] | @base64'); do
 		# Delete the file if the backup was not successfull
 		rm $backup_folder/"$date"/${db_host}_all-databases.sql -f
 	fi
-    echo "------------------"
+    echo "-------------------------"
 
 done
