@@ -20,11 +20,17 @@ then
 	backup_hosts_location=$DB_BACKUP_HOSTS_FILE
 fi
 
+# Max backups to keep
+if [ -n $DB_BACKUP_MAX ]
+then
+	max_backups=$DB_BACKUP_MAX
+fi
+
 ########
 # Passed options, any passed option will overwrite a previously set environment variable
 ########
 
-while getopts ":b:c:h" opt; do
+while getopts ":b:c:d:h" opt; do
   case $opt in
     b)
       backup_folder=$OPTARG
@@ -32,16 +38,21 @@ while getopts ":b:c:h" opt; do
     c)
       backup_hosts_location=$OPTARG
       ;;
+    d)
+      max_backups=$OPTARG
+      ;;
     h)
       echo "AVAILABLE OPTIONS: 
 
 -b: Folder where to store the backups.
 -c: Location of the config.json file which holds all hosts you want to backup.
+-d: Maximum number of backups to keep. Defaults to 24.
 -h: Print this help message.
 
 Environment Variables:
 - DB_BACKUP_FOLDER: Where to store the backups.
 - DB_BACKUP_HOSTS_FILE: Location of the config.json file which holds all hosts you want to backup.
+- DB_BACKUP_MAX: Maximum number of backups to keep. Defaults to 24.
  
 Copyright 2018 K. Langenberg. All rights reserved.
 Use of this source code is governed by a GPLv3-style
@@ -75,6 +86,12 @@ then
 	backup_folder=$PWD/backups
 fi
 
+# Max number of backups to keep
+if [ -z $max_backups ]
+then 
+	$max_backups=24
+fi
+
 # Save the date
 date=`date +%d\-%m\-%Y\_%H\-%M\-%S`
 
@@ -103,17 +120,22 @@ fi
 # Load Config
 backup_hosts_file=$(cat $backup_hosts_location)
 
+######################
+# Delete old backups #
+######################
+
+if [ -n "\${max_backups}" && "$(ls -A $backup_folder)" ]; then
+    while [ \$(ls $backup_folder -1 | wc -l) -gt \${max_backups} ];
+    do
+        BACKUP_TO_BE_DELETED=\$(ls $backup_folder -1tr | head -n 1)
+        echo "   Backup \${BACKUP_TO_BE_DELETED} is deleted"
+        rm -rf \${BACKUP_TO_BE_DELETED}
+    done
+fi
+
 ####################
 # Start the backup #
 ####################
-
-# Delete backups older than three days if there are any
-if [ "$(ls -A $backup_folder)" ]; then
-	echo "Deleting Backups older than three days..."
-	find $backup_folder/* -type d -ctime +3 | xargs rm -rf
-	echo "Deleted."
-	echo "-------------------------------"
-fi
 
 # Create new Backup folder
 mkdir $backup_folder/"$date" -p
