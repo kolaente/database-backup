@@ -1,21 +1,7 @@
 [
    {
-      "host":"host1",
+      "host":"host-db",
       "user":"root",
       "password":"1234"
-   },
-   {
-      "host":"host2",
-      "user":"root",
-      "password":"123443"
-   },
-   {
-      "host":"127.0.0.1",
-      "user":"root",
-      "password":"jup2000"
-   },
-   {
-      "user":"root",
-      "password":"123443"
    }
 ]

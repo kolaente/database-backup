@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Copyright 2018 K. Langenberg. All rights reserved.
 # Use of this source code is governed by a GPLv3-style
@@ -101,7 +101,7 @@ if [ ! -f $backup_hosts_location ]; then
 fi
 
 # Load Config
-backup_hosts_file=$(<$backup_hosts_location)
+backup_hosts_file=$(cat $backup_hosts_location)
 
 ####################
 # Start the backup #
