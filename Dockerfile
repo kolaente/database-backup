@@ -1,13 +1,18 @@
 FROM alpine:3.7
 
 RUN apk add --no-cache mysql-client jq && \
-mkdir /data/config -p && mkdir /data/backups
+mkdir /config && mkdir /backups
 
-ADD backup.sh /data/backup.sh
-ENV DB_BACKUP_HOSTS_FILE=/data/config/backup_hosts.json \
-    DB_BACKUP_FOLDER=/data/backups
+ADD backup.sh /backup.sh
+ADD run.sh /run.sh
+RUN chmod +x /backup.sh && \
+chmod +x /run.sh
 
-VOLUME /data/config
-VOLUME /data/backups
+ENV DB_BACKUP_HOSTS_FILE=/config/backup_hosts.json \
+    DB_BACKUP_FOLDER=/backups \
+    CRON_TIME="0 0 * * *"
 
-ENTRYPOINT "./data/backup.sh"
+VOLUME /config
+VOLUME /backups
+
+CMD ["/run.sh"]
