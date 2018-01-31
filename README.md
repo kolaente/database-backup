@@ -12,5 +12,5 @@
 
 ### TODO
 
-* Add example on how to use it -> example `backup_hosts.json`
+* Add example on how to use it -> example `backup_hosts.json`, with explanation of defaults
 * Dockerimage
