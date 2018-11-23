@@ -187,7 +187,7 @@ for row in $(echo "${backup_hosts_file}" | jq -r '.[] | @base64'); do
 
 	# Do the backup
 	echo "Backing up $db_host"
-	mysqldump --all-databases -u ${db_user} -p${db_pw} -h ${db_host} --port ${db_port}  > $backup_folder/"$date"/${db_host}_all-databases.sql
+	mysqldump --all-databases -u ${db_user} -p${db_pw} -h ${db_host} --port ${db_port} –-lock-tables=0  > $backup_folder/"$date"/${db_host}_all-databases.sql
 	if [ $? -eq 0 ]; then			
 		echo "Success."
 	else
